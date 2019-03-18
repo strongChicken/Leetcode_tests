@@ -1,31 +1,18 @@
 def maxSubArray(nums):
     nums_L = len(nums)
-    tempcount = maxcount = nums[0]
-
-    if nums_L == 1:
-        return nums[0]
-    elif nums_L == 2:
-        maxcount = nums[0] + nums[1]
-        if nums[0] > maxcount:
-            maxcount = nums[0]
-            # print("step1 max：", maxcount)
-        if nums[1] > maxcount:
-            maxcount = nums[1]
-            # print("step2 max：",maxcount)
-        return maxcount
+    maxcount = nums[0]
+    tempcount = 0
 
     for i in range(nums_L):
-        tempcount = nums[i]
-        for j in range(i+1,nums_L):
-            print("max: ",maxcount,"temp: ",tempcount, "i: ",i, "j: ",j)
-            if tempcount > maxcount:
-                tempcount += nums[j]
-                maxcount = tempcount
-
-
+        tempcount += nums[i]    # tempcount 可以看作一枚指针，指针位置的元素相加小于0，代表往后相加只会造成更小的值，而不是使 总和 变大。这是核心思想。
+        if tempcount > maxcount:
+            maxcount = tempcount
+        if tempcount < 0:
+            tempcount = 0       # 当tempcount < 0 时，即"和"不具备增值效益，继续相加，只会减少总和，故舍去
+                                # 为什么没有 tempcount = maxcount 的判断，因为没有意义，当两个值相同，意味着就看下一个位置的元素是否为负数，继续循环判断。
     return maxcount
 
 
-testlist = [-2,-1,-3,-1]
+testlist = [-1,4]
 print(maxSubArray(testlist))
 print("sum: ",sum(testlist))
